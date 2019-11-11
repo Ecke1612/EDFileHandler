@@ -1,13 +1,14 @@
 package com.ed.filehandler;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class PlainFileHandler {
+public class PlainHandler {
 
     public void fileWriter(String StringPath, String[] content) throws IOException {
         Path path = Paths.get(StringPath);
@@ -45,6 +46,21 @@ public class PlainFileHandler {
         }
     }
 
+    public void fileWriterNewLineUTF(String stringPath, ArrayList<String> content) {
+        try {
+            //OutputStreamWriter writer = new OutputStreamWriter((new FileOutputStream(stringPath)), StandardCharsets.UTF_8);
+            Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(stringPath), "UTF-8"));
+            //BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(stringPath), StandardCharsets.UTF_8));
+            for(String line : content) {
+                writer.write(line);
+                writer.write("\n");
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void hideFile(String filePath) {
         try {
             Path path = Paths.get(filePath);
@@ -72,6 +88,24 @@ public class PlainFileHandler {
             }
             fr.close();
             br.close();
+
+            return data;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public ArrayList<String> fileLoaderUTF(String stringPath) {
+        ArrayList<String> data = new ArrayList<>();
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(stringPath));
+            String line;
+            while((line = in.readLine()) != null) {
+                String utfString = new String(line.getBytes(), "UTF-8");
+                data.add(utfString);
+            }
+            in.close();
 
             return data;
         } catch (IOException e) {
