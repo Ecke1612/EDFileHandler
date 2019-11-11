@@ -80,6 +80,42 @@ public class PlainFileHandler {
         return data;
     }
 
+    public ArrayList<String> fileLoaderStream(String stringPath, String charSet) {
+        ArrayList<String> data = new ArrayList<>();
+        try {
+            String line;
+            FileInputStream fileInputStream = new FileInputStream(stringPath);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(stringPath), charSet));
+            while((line = reader.readLine()) != null) {
+                data.add(line);
+            }
+            fileInputStream.close();
+            inputStreamReader.close();
+            reader.close();
+
+            return data;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public String readFirstLine(String path) {
+        BufferedReader brLine = null;
+        try {
+            FileReader freader = new FileReader(path);
+            brLine = new BufferedReader(freader);
+            String line = brLine.readLine();
+            freader.close();
+            brLine.close();
+            return line;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean fileExist(String path) {
         File file = new File(path);
         if(file.exists()) {
